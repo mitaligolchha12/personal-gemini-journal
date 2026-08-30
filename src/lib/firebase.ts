@@ -299,14 +299,17 @@ export async function fetchJourneyMilestones(userId: string): Promise<JourneyMil
 }
 
 // --- Thought Patterns ---
-export async function saveThoughtPatterns(userId: string, patterns: Omit<ThoughtPattern, 'id' | 'userId'>[]): Promise<void> {
+export async function saveThoughtPatterns(
+  userId: string, 
+  patterns: Array<Omit<ThoughtPattern, 'id' | 'userId'> | { theme: string; frequency: number; insight: string; relatedJournalIds: string[]; relatedJournalTitles: string[]; lastDetectedAt?: number }>
+): Promise<void> {
   const patternsCol = collection(db, 'users', userId, 'patterns');
   for (const pat of patterns) {
     const newDoc = doc(patternsCol);
     await setDoc(newDoc, sanitizeFirestorePayload({
       ...pat,
       userId,
-      lastDetectedAt: Date.now()
+      lastDetectedAt: pat.lastDetectedAt || Date.now()
     }));
   }
 }
