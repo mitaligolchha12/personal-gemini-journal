@@ -1,0 +1,114 @@
+{
+  "$schema": "https://firebase.google.com/schemas/firestore/blueprint/v1.json",
+  "collections": {
+    "users": {
+      "description": "Root collection representing authenticated users with strict owner isolation",
+      "subcollections": {
+        "profile": {
+          "description": "User preferences, writing streak, and metadata",
+          "fields": {
+            "displayName": { "type": "string" },
+            "email": { "type": "string" },
+            "photoURL": { "type": "string" },
+            "writingStreak": { "type": "number" },
+            "lastActiveAt": { "type": "timestamp" },
+            "createdAt": { "type": "timestamp" }
+          }
+        },
+        "journals": {
+          "description": "Private personal journal entries with reflection cards and summaries",
+          "fields": {
+            "title": { "type": "string" },
+            "content": { "type": "string" },
+            "mood": { "type": "string" },
+            "tags": { "type": "array", "items": { "type": "string" } },
+            "favorite": { "type": "boolean" },
+            "summary": { "type": "string" },
+            "reflection": {
+              "type": "map",
+              "fields": {
+                "coreTheme": { "type": "string" },
+                "observation": { "type": "string" },
+                "thinkAbout": { "type": "string" },
+                "possibleNextStep": { "type": "string" }
+              }
+            },
+            "suggestedActions": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "createdAt": { "type": "timestamp" },
+            "updatedAt": { "type": "timestamp" }
+          }
+        },
+        "sessions": {
+          "description": "Multi-turn Gemini reflection conversation sessions tied to a journal entry",
+          "fields": {
+            "journalId": { "type": "string" },
+            "createdAt": { "type": "timestamp" },
+            "updatedAt": { "type": "timestamp" }
+          },
+          "subcollections": {
+            "messages": {
+              "description": "Individual turns in the journal's Gemini dialogue",
+              "fields": {
+                "role": { "type": "string" },
+                "content": { "type": "string" },
+                "timestamp": { "type": "timestamp" }
+              }
+            }
+          }
+        },
+        "goals": {
+          "description": "Actionable smart goals generated from reflections or user-defined",
+          "fields": {
+            "title": { "type": "string" },
+            "description": { "type": "string" },
+            "category": { "type": "string" },
+            "sourceJournalId": { "type": "string" },
+            "progress": { "type": "number" },
+            "status": { "type": "string" },
+            "targetDate": { "type": "string" },
+            "tasks": {
+              "type": "array",
+              "items": {
+                "type": "map",
+                "fields": {
+                  "id": { "type": "string" },
+                  "text": { "type": "string" },
+                  "completed": { "type": "boolean" },
+                  "completedAt": { "type": "timestamp" }
+                }
+              }
+            },
+            "createdAt": { "type": "timestamp" },
+            "updatedAt": { "type": "timestamp" }
+          }
+        },
+        "patterns": {
+          "description": "Cached or surfaced recurring thought patterns across historical journal entries",
+          "fields": {
+            "theme": { "type": "string" },
+            "frequency": { "type": "number" },
+            "insight": { "type": "string" },
+            "relatedJournalIds": { "type": "array", "items": { "type": "string" } },
+            "relatedJournalTitles": { "type": "array", "items": { "type": "string" } },
+            "lastDetectedAt": { "type": "timestamp" }
+          }
+        },
+        "journey": {
+          "description": "Milestones and narrative events on the user's personal growth timeline",
+          "fields": {
+            "type": { "type": "string" },
+            "title": { "type": "string" },
+            "description": { "type": "string" },
+            "date": { "type": "string" },
+            "relatedId": { "type": "string" },
+            "tag": { "type": "string" },
+            "createdAt": { "type": "timestamp" }
+          }
+        }
+      }
+    }
+  }
+}

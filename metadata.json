@@ -1,0 +1,7 @@
+{
+  "name": "Personal Gemini Journal",
+  "description": "A secure AI reflection and growth workspace that turns your thoughts into reflections, recurring patterns, smart goals, and personal growth journeys with Gemini.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
